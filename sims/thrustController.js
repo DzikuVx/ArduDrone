@@ -2,12 +2,12 @@ var exports = exports || {};
 
 exports.Controller = function () {
 
-    this.errorLength = 20;
+    this.errorLength = 10;
     this.errors = [];
 
     this.Kp = 5;
     this.Ki = 0.1;
-    this.Kd = 0;
+    this.Kd = 0.2;
 
     this.deltaMultiplier = 1;
 

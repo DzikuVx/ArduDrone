@@ -26,6 +26,11 @@ m.altitudeError = 50;
  * Run model for given number of iterations
  */
 for(i = 0; i < 900; i++) {
+
+    if (i === 450) {
+        m.targetAltitude = 300;
+    }
+
     m.run();
 }
 
@@ -44,25 +49,35 @@ ctx.fill();
 
 var labels = [],
     line = [],
+    boundUp = [],
+    boundDown = [],
     length = m.altitudes.length;
 
 for (i = 0; i < length; i++) {
     labels.push(0);
     line.push(400);
+    boundDown.push(400 - 25);
+    boundUp.push(400 + 25);
 }
 
 Chart(ctx).Line({
     labels: labels,
     datasets: [
         {
-            data: m.altitudes,
-            pointColor: "red",
-            pointStrokeColor: "red",
-            fillColor: "red"
+            data: line,
+            strokeColor: "blue"
         },
         {
-            data: line,
-            pointColor: "green"
+            data: boundDown,
+            strokeColor: "lightgray"
+        },
+        {
+            data: boundUp,
+            strokeColor: "lightgray"
+        },
+        {
+            data: m.altitudes,
+            strokeColor: "red"
         }
     ]
 }, {
@@ -71,7 +86,10 @@ Chart(ctx).Line({
     datasetFill: false,
     bezierCurve: false,
     pointDot: false,
-    scaleShowLabels: false
+    scaleShowLabels: false,
+    drawScale: true,
+    scaleShowGridLines: false,
+    showXLabels: false
 });
 
 canvas.toBuffer(function (err, buf) {
