@@ -5,14 +5,14 @@ exports.Controller = function () {
     this.errorLength = 10;
     this.errors = [];
 
-    this.Kp = 5;
-    this.Ki = 0.1;
-    this.Kd = 0.2;
+    this.Kp = 0.4;
+    this.Ki = 0.02;
+    this.Kd = 0.1;
 
     this.deltaMultiplier = 1;
 
     this.maxOutput = 250; // [PWM]
-    this.minOutput =  64; // [PWM]
+    this.minOutput = 48; // [PWM]
     this.maxDelta = 20; // [PWM]
 
     this.currentOutput = 0; // [PWM]

@@ -28,14 +28,14 @@ m.altitudeError = 50;
 for(i = 0; i < 900; i++) {
 
     if (i === 450) {
-        m.targetAltitude = 300;
+        m.targetAltitude = 500;
     }
 
     m.run();
 }
 
-//console.log("Outputs", m.outputs);
-console.log("Altitudes", m.altitudes);
+console.log("Outputs", m.outputs);
+//console.log("Altitudes", m.altitudes);
 
 var Canvas = require('canvas')
     , canvas = new Canvas(1000, 300)

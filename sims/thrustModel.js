@@ -31,9 +31,9 @@ exports.Model = function () {
     this.controller = null;
 
     //Bigger value causes bigger inertia and it takes longer to archive desired speed
-    this.delayFactor = 0.8;
+    this.delayFactor = 0.75;
 
-    this.altitudeError = 40; // [cm]
+    this.altitudeError = 50; // [cm]
 
     this.inertiaLength = 2;
     this.speedInertias = [];
@@ -71,7 +71,10 @@ exports.Model = function () {
     this.addNoiseToAltitude = function (value) {
         var retVal = value + (Math.random() * this.altitudeError) - (this.altitudeError / 2);
 
-        console.log(retVal);
+        /*
+         * Round to tens of centimeters
+         */
+        retVal = Math.round(retVal / 10) * 10;
 
         return retVal;
     };
