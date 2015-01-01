@@ -2,7 +2,7 @@ var exports = exports || {};
 
 exports.Controller = function () {
 
-    this.errorLength = 5;
+    this.errorLength = 20;
     this.errors = [];
 
     this.Kp = 5;
@@ -13,7 +13,7 @@ exports.Controller = function () {
 
     this.maxOutput = 250; // [PWM]
     this.minOutput =  64; // [PWM]
-    this.maxDelta = 120; // [PWM]
+    this.maxDelta = 20; // [PWM]
 
     this.currentOutput = 0; // [PWM]
 
