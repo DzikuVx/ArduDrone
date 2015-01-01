@@ -1,6 +1,22 @@
 var exports = exports || {};
 
+/**
+ * Model assumes that thrust is adjusted with 10Hz frequency
+ * @constructor
+ */
 exports.Model = function () {
+
+    /**
+     * Number of adjustment cycles per second
+     * @type {number}
+     */
+    this.adjustmentsPerSecond = 10;
+
+    /**
+     * Max vertical speed in cm/s
+     * @type {number}
+     */
+    this.verticalSpeed = 40;
 
     this.targetAltitude = 0; //[cm]
     this.currentAltitude = 0;
@@ -15,7 +31,7 @@ exports.Model = function () {
     this.controller = null;
 
     //Bigger value causes bigger inertia and it takes longer to archive desired speed
-    this.delayFactor = 0.4;
+    this.delayFactor = 0.8;
 
     this.altitudeError = 40; // [cm]
 
@@ -23,7 +39,8 @@ exports.Model = function () {
     this.speedInertias = [];
 
     this.zeroThrustAt = 100; // [pwm]
-    this.speedPerUnit = 0.30; // [cm/s/pwm]
+
+    this.speedPerUnit = (this.verticalSpeed / (255 - this.zeroThrustAt)) / this.adjustmentsPerSecond;
 
     this.setController = function (controller) {
         this.controller = controller;
@@ -46,8 +63,17 @@ exports.Model = function () {
         this.outputs = [];
     };
 
+    /**
+     * Altitude can have an error of this.altitudeError plus, resut is rounded to 10cm
+     * @param {number} value
+     * @returns {number}
+     */
     this.addNoiseToAltitude = function (value) {
-        return value + (Math.random() * this.altitudeError) - (this.altitudeError / 2);
+        var retVal = value + (Math.random() * this.altitudeError) - (this.altitudeError / 2);
+
+        console.log(retVal);
+
+        return retVal;
     };
 
     this.pushInertia = function (value) {

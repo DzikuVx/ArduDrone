@@ -19,14 +19,14 @@ m.reset(0, 400);
 /*
  * Set altitude error rate to 10cm
  */
-m.altitudeError = 40;
+m.altitudeError = 50;
 
 /*
  * Run model for given number of iterations
  */
-for(var i = 0; i < 30; i++) {
+for(var i = 0; i < 200; i++) {
     m.run();
 }
 
-console.log("Outputs", m.outputs);
+//console.log("Outputs", m.outputs);
 console.log("Altitudes", m.altitudes);

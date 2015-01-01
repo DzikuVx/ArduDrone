@@ -1,3 +1,5 @@
+var exports = exports || {};
+
 exports.Controller = function () {
 
     this.errorLength = 5;
@@ -5,13 +7,17 @@ exports.Controller = function () {
 
     this.Kp = 5;
     this.Ki = 0.1;
-    this.Kd = 1;
+    this.Kd = 0;
 
-    this.maxOutput = 230; // [PWM]
+    this.deltaMultiplier = 1;
+
+    this.maxOutput = 250; // [PWM]
     this.minOutput =  64; // [PWM]
-    this.maxDelta = 128; // [PWM]
+    this.maxDelta = 120; // [PWM]
 
     this.currentOutput = 0; // [PWM]
+
+    this.previousInput = 0;
 
     this.cap = function (value) {
         //cap max
@@ -42,8 +48,7 @@ exports.Controller = function () {
         return this.Kp * (target - current);
     };
 
-    this.computeI = function (target, current) {
-
+    this.computeI = function () {
         var sum=0;
         for (var i = this.errors.length; i--;) {
             sum += this.errors[i];
@@ -51,6 +56,28 @@ exports.Controller = function () {
         return this.Ki * sum;
     };
 
+    /**
+     * Compute Derivative component of controller
+     * @param {number} target
+     * @param {number} current
+     * @returns {number}
+     */
+    this.computeD = function (target, current) {
+        var retVal,
+            delta = current - this.previousInput;
+
+        retVal = target - (current + (delta * this.deltaMultiplier));
+
+        retVal = this.Kd * retVal;
+
+        this.previousInput = current;
+
+        return retVal;
+    };
+
+    /**
+     * @param {number} error
+     */
     this.pushI = function (error) {
         this.errors.push(error);
         if (this.errors.length > this.errorLength) {
@@ -58,11 +85,18 @@ exports.Controller = function () {
         }
     };
 
+    /**
+     *
+     * @param {float} target
+     * @param {float} current
+     * @returns {int}
+     */
     this.run = function (target, current) {
         var delta = 0;
 
         delta += this.computeP(target, current);
-        delta += this.computeI(target, current);
+        delta += this.computeI();
+        delta += this.computeD(target, current);
 
         this.pushI(target - current);
 
