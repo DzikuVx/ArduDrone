@@ -11,8 +11,8 @@ exports.Controller = function () {
 
     this.deltaMultiplier = 1;
 
-    this.maxOutput = 250; // [PWM]
-    this.minOutput = 48; // [PWM]
+    this.maxOutput = 144; // [PWM] Max thrust set at 80%
+    this.minOutput = 45; // [PWM] Min thrust set at 25%
     this.maxDelta = 20; // [PWM]
 
     this.currentOutput = 0; // [PWM]

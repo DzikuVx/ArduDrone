@@ -38,7 +38,7 @@ exports.Model = function () {
     this.inertiaLength = 2;
     this.speedInertias = [];
 
-    this.zeroThrustAt = 100; // [pwm]
+    this.zeroThrustAt = 90; // [pwm]
 
     this.speedPerUnit = (this.verticalSpeed / (255 - this.zeroThrustAt)) / this.adjustmentsPerSecond;
 
