@@ -16,12 +16,13 @@ exports.Model = function () {
      * Max vertical speed in cm/s
      * @type {number}
      */
-    this.verticalSpeed = 40;
+    this.verticalSpeed = 60;
 
     this.targetAltitude = 0; //[cm]
     this.currentAltitude = 0;
     this.currentSpeed = 0;
     this.altitudes = [];
+    this.alitudesFromSensor = [];
     this.speeds = [];
 
     this.currentOutput = 0;
@@ -51,6 +52,7 @@ exports.Model = function () {
         this.currentAltitude = current;
         this.currentSpeed = 0;
         this.altitudes = [];
+        this.alitudesFromSensor = [];
         this.speeds = [];
 
         this.currentOutput = 0;
@@ -90,7 +92,9 @@ exports.Model = function () {
 
     this.run = function () {
 
-        var controllerOutput = this.controller.run(this.targetAltitude, this.addNoiseToAltitude(this.currentAltitude));
+        var computedAlitude = this.addNoiseToAltitude(this.currentAltitude);
+
+        var controllerOutput = this.controller.run(this.targetAltitude, computedAlitude);
 
         this.pushOutput(controllerOutput);
 
@@ -107,6 +111,7 @@ exports.Model = function () {
         this.currentAltitude = this.currentAltitude + this.currentSpeed - ((this.currentSpeed - this.speedInertias.average()) * this.delayFactor);
 
         this.pushInertia(this.currentSpeed);
+        this.alitudesFromSensor.push(Math.round(computedAlitude * 10) / 10);
         this.altitudes.push(Math.round(this.currentAltitude * 10) / 10);
         this.speeds.push(Math.round(this.currentSpeed * 10) / 10);
 

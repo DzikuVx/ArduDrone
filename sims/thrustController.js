@@ -71,14 +71,12 @@ exports.Controller = function () {
             delta,
             future;
 
-        if (this.inputs.length == this.inputLength) {
+        if (this.inputs.length > 0) {
             delta = current - this.inputs[0];
             future = current + delta;
             retVal = this.Kd * (target - future);
         }
-
-        console.log(retVal);
-
+        
         return retVal;
     };
 
