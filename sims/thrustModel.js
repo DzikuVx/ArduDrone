@@ -31,11 +31,11 @@ exports.Model = function () {
     this.controller = null;
 
     //Bigger value causes bigger inertia and it takes longer to archive desired speed
-    this.delayFactor = 0.75;
+    this.delayFactor = 0.9;
 
     this.altitudeError = 50; // [cm]
 
-    this.inertiaLength = 2;
+    this.inertiaLength = 9;
     this.speedInertias = [];
 
     this.zeroThrustAt = 90; // [pwm]

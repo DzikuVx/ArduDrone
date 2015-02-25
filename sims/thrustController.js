@@ -2,22 +2,26 @@ var exports = exports || {};
 
 exports.Controller = function () {
 
-    this.errorLength = 10;
+    /*
+     * Values used by I factor for a error queue
+     */
+    this.errorLength = 20;
     this.errors = [];
 
-    this.Kp = 0.4;
-    this.Ki = 0.02;
-    this.Kd = 0.1;
-
-    this.deltaMultiplier = 1;
+    this.Kp = 0.6;
+    this.Ki = 0.08;
+    this.Kd = 0.75;
 
     this.maxOutput = 144; // [PWM] Max thrust set at 80%
     this.minOutput = 45; // [PWM] Min thrust set at 25%
-    this.maxDelta = 20; // [PWM]
+    this.maxDelta = 60; // [PWM]
 
     this.currentOutput = 0; // [PWM]
 
     this.previousInput = 0;
+
+    this.inputLength = 10;
+    this.inputs = [];
 
     this.cap = function (value) {
         //cap max
@@ -63,14 +67,17 @@ exports.Controller = function () {
      * @returns {number}
      */
     this.computeD = function (target, current) {
-        var retVal,
-            delta = current - this.previousInput;
+        var retVal = 0,
+            delta,
+            future;
 
-        retVal = target - (current + (delta * this.deltaMultiplier));
+        if (this.inputs.length == this.inputLength) {
+            delta = current - this.inputs[0];
+            future = current + delta;
+            retVal = this.Kd * (target - future);
+        }
 
-        retVal = this.Kd * retVal;
-
-        this.previousInput = current;
+        console.log(retVal);
 
         return retVal;
     };
@@ -85,6 +92,13 @@ exports.Controller = function () {
         }
     };
 
+    this.pushCurrentInput = function (value) {
+        this.inputs.push(value);
+        if (this.inputs.length > this.inputLength) {
+            this.inputs.shift();
+        }
+    };
+
     /**
      *
      * @param {float} target
@@ -93,6 +107,8 @@ exports.Controller = function () {
      */
     this.run = function (target, current) {
         var delta = 0;
+
+        this.pushCurrentInput(current);
 
         delta += this.computeP(target, current);
         delta += this.computeI();

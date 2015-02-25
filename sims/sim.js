@@ -26,15 +26,14 @@ m.altitudeError = 50;
  * Run model for given number of iterations
  */
 for(i = 0; i < 900; i++) {
-
-    if (i === 450) {
-        m.targetAltitude = 500;
-    }
+    // if (i === 450) {
+    //     m.targetAltitude = 500;
+    // }
 
     m.run();
 }
 
-console.log("Outputs", m.outputs);
+// console.log("Outputs", m.outputs);
 //console.log("Altitudes", m.altitudes);
 
 var Canvas = require('canvas')
