@@ -5,7 +5,7 @@ exports.Controller = function () {
     /*
      * Values used by I factor for a error queue
      */
-    this.errorLength = 20;
+    this.errorLength = 10;
     this.errors = [];
 
     this.Kp = 0.6;
